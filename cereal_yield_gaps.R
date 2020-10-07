@@ -49,5 +49,5 @@ rcyld$rice_yield <- rcyld$rice_prod / rcyld$rice_area ## Mg/ha rice yields
 # Wheat yield calculations (Mg/ha)
 wtyld <- merge(cereal_panel, area, by="id")
 wtyld <- merge(wtyld, wheat_prod, by="id")
-wtyld <- wtyld[complete.cases(wtyld[ ,7,10]),]
+wtyld <- wtyld[complete.cases(wtyld[ ,9,10]),]
 wtyld$wheat_yield <- wtyld$wheat_prod / wtyld$wheat_area ## Mg/ha wheat yields
