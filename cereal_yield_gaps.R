@@ -2,7 +2,7 @@
 # M.G. Walsh, October 2020
 
 # Required packages
-# install.packages(c("downloader","arm")), dependencies=TRUE)
+# install.packages(c("downloader","arm","dplyr")), dependencies=TRUE)
 suppressPackageStartupMessages({
   require(downloader)
   require(arm)
