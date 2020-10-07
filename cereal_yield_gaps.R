@@ -1,4 +1,4 @@
-# Mixed model analyses of national level cereal-yield gap data
+# Mixed model analyses of global south level cereal-yield gap data
 # M.G. Walsh, October 2020
 
 # Required packages
@@ -28,7 +28,8 @@ rice_prod <- read.table("rice_prod.csv", header = T, sep = ",") ## total rice pr
 wheat_prod <- read.table("wheat_prod.csv", header = T, sep = ",") ## total wheat production estimates (Mg)
 fert_consumption <- read.table("fert_consumption.csv", header = T, sep = ",") ## fertilizer consumption (kg/ha for arable land)
 
-# Cereal yield calculation
+# Yield calculations ------------------------------------------------------
+# Total cereal yield calculations
 cepan <- merge(cereal_panel, cereal_prod, by="id")
 cepan <- cepan[complete.cases(cepan[ ,7:8]),]
 cepan$cereal_yield <- cepan$cereal_prod / cepan$cereal_area ## Mg / ha
