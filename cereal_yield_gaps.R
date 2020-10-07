@@ -41,6 +41,6 @@ mrwpan <- merge(mzpan, rice_prod, by="id")
 mrwpan <- merge(mzpan, wheat_prod, by="id")
 
 mrwpan$maize_yield <- mrwpan$maize_prod / mrwpan$maize_area ## Mg/ha maize yields
-mrwpan$rice_yield <- mrwpan$rice_area / mrwpan$maize_prod ## Mg/ha rice yields
-mrwpan$wheat_yield <- mrwpan$wheat_area / mrwpan$wheat_prod ## Mg/ha wheat yields
+mrwpan$rice_yield <- mrwpan$rice_prod / mrwpan$maize_area ## Mg/ha rice yields
+mrwpan$wheat_yield <- mrwpan$wheat_prod / mrwpan$wheat_area ## Mg/ha wheat yields
 
