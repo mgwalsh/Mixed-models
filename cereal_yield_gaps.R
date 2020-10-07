@@ -29,18 +29,25 @@ wheat_prod <- read.table("wheat_prod.csv", header = T, sep = ",") ## total wheat
 fert_consumption <- read.table("fert_consumption.csv", header = T, sep = ",") ## fertilizer consumption (kg/ha for arable land)
 
 # Yield calculations ------------------------------------------------------
-# Total cereal yield calculations
+# Total cereal yield calculations (Mg/ha)
 cepan <- merge(cereal_panel, cereal_prod, by="id")
 cepan <- cepan[complete.cases(cepan[ ,7:8]),]
 cepan$cereal_yield <- cepan$cereal_prod / cepan$cereal_area ## Mg/ha
 
-# Maize, rice, & wheat yield calculations
-mrwpan <- merge(cereal_panel, area, by="id")
-mrwpan <- merge(mzpan, maize_prod, by="id")
-mrwpan <- merge(mzpan, rice_prod, by="id")
-mrwpan <- merge(mzpan, wheat_prod, by="id")
+# Maize yield calculations (Mg/ha)
+mzpan <- merge(cereal_panel, area, by="id")
+mzpan <- merge(mzpan, maize_prod, by="id")
+mzpan <- mzpan[complete.cases(mzpan[ ,7,10]),]
+mzpan$maize_yield <- mzpan$maize_prod / mzpan$maize_area ## Mg/ha maize yields
 
-mrwpan$maize_yield <- mrwpan$maize_prod / mrwpan$maize_area ## Mg/ha maize yields
-mrwpan$rice_yield <- mrwpan$rice_prod / mrwpan$maize_area ## Mg/ha rice yields
-mrwpan$wheat_yield <- mrwpan$wheat_prod / mrwpan$wheat_area ## Mg/ha wheat yields
+# Rice yield calculations (Mg/ha)
+rcpan <- merge(cereal_panel, area, by="id")
+rcpan <- merge(rcpan, rice_prod, by="id")
+rcpan <- mzpan[complete.cases(rcpan[ ,7,10]),]
+rcpan$rice_yield <- rcpan$rice_prod / rcpan$rice_area ## Mg/ha rice yields
 
+# Wheat yield calculations (Mg/ha)
+wtpan <- merge(cereal_panel, area, by="id")
+wtpan <- merge(rcpan, wheat_prod, by="id")
+wtpan <- wtpan[complete.cases(rcpan[ ,7,10]),]
+wtpan$wheat_yield <- wtpan$wheat_prod / wtpan$wheat_area ## Mg/ha wheat yields
