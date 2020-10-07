@@ -32,4 +32,15 @@ fert_consumption <- read.table("fert_consumption.csv", header = T, sep = ",") ##
 # Total cereal yield calculations
 cepan <- merge(cereal_panel, cereal_prod, by="id")
 cepan <- cepan[complete.cases(cepan[ ,7:8]),]
-cepan$cereal_yield <- cepan$cereal_prod / cepan$cereal_area ## Mg / ha
+cepan$cereal_yield <- cepan$cereal_prod / cepan$cereal_area ## Mg/ha
+
+# Maize, rice, & wheat yield calculations
+mrwpan <- merge(cereal_panel, area, by="id")
+mrwpan <- merge(mzpan, maize_prod, by="id")
+mrwpan <- merge(mzpan, rice_prod, by="id")
+mrwpan <- merge(mzpan, wheat_prod, by="id")
+
+mrwpan$maize_yield <- mrwpan$maize_prod / mrwpan$maize_area ## Mg/ha maize yields
+mrwpan$rice_yield <- mrwpan$rice_area / mrwpan$maize_prod ## Mg/ha rice yields
+mrwpan$wheat_yield <- mrwpan$wheat_area / mrwpan$wheat_prod ## Mg/ha wheat yields
+
