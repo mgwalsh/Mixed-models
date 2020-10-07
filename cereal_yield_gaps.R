@@ -43,7 +43,7 @@ mzyld$maize_yield <- mzyld$maize_prod / mzyld$maize_area ## Mg/ha maize yields
 # Rice yield calculations (Mg/ha)
 rcyld <- merge(cereal_panel, area, by="id")
 rcyld <- merge(rcyld, rice_prod, by="id")
-rcyld <- mzyld[complete.cases(rcpan[ ,8,10]),]
+rcyld <- rcyld[complete.cases(rcyld[ ,8,10]),]
 rcyld$rice_yield <- rcyld$rice_prod / rcyld$rice_area ## Mg/ha rice yields
 
 # Wheat yield calculations (Mg/ha)
