@@ -93,4 +93,9 @@ ma$b0 <- ma.ran$cc[,1]
 ma$b1 <- ma.ran$cc[,2]
 colnames(ma) <- c("cc","b0","b1")
 
-
+# extract standard errors
+ma.se <- se.coef(ma.lme) ## extract random effects
+mae <- as.data.frame(rownames(mae.se$cc))
+mae$b0 <- mae.se$cc[,1]
+mae$b1 <- mae.se$cc[,2]
+colnames(mae) <- c("cc","e0","e1")
