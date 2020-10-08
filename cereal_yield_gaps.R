@@ -49,8 +49,8 @@ rcyld <- rcyld[complete.cases(rcyld[ ,11]),]
 # Wheat yield calculations (Mg/ha)
 wtyld <- merge(cereal_panel, area, by="id")
 wtyld <- merge(wtyld, wheat_prod, by="id")
-wtyld <- wtyld[complete.cases(wtyld[ ,9,10]),]
 wtyld$wheat_yield <- wtyld$wheat_prod / wtyld$wheat_area ## Mg/ha wheat yields
+wtyld <- wtyld[complete.cases(wtyld[ ,11]),]
 
 # Cereal productivity trends over time by country -------------------------
 # Total cereal yield (Mg/ha) trends
@@ -59,17 +59,28 @@ summary(ce.lme)
 plot(cereal_yield~fitted(ce.lme), ceyld)
 
 # Maize yield (Mg/ha) trends
-mz.lme <- lmer(maize_yield~I(year-1961)+(I(year-1961)|cc), mzyld) ## random intercept & slope model
+my.lme <- lmer(maize_yield~I(year-1961)+(I(year-1961)|cc), mzyld) ## random intercept & slope model
 summary(mz.lme)
 plot(maize_yield~fitted(mz.lme), mzyld)
 
+# Maize area (Mha) trends
+ma.lme <- lmer(maize_area~I(year-1961)+(I(year-1961)|cc), mzyld) ## random intercept & slope model
+summary(ma.lme)
+plot(maize_area~fitted(ma.lme), mzyld)
+
+# extract random effects
+ma.ran <- ranef(ma.lme) ## extract random effects
+ma <- as.data.frame(rownames(ma.ran$cc))
+ma$ma <- ma.ran$cc[,1]
+colnames(ma) <- c("b0","b1")
+
 # Rice yield (Mg/ha) trends
-rc.lme <- lmer(rice_yield~I(year-1961)+(I(year-1961)|cc), rcyld) ## random intercept & slope model
-summary(rc.lme)
-plot(rice_yield~fitted(rc.lme), rcyld)
+ry.lme <- lmer(rice_yield~I(year-1961)+(I(year-1961)|cc), rcyld) ## random intercept & slope model
+summary(ry.lme)
+plot(rice_yield~fitted(ry.lme), rcyld)
 
 # Wheat yield (Mg/ha) trends
-wt.lme <- lmer(wheat_yield~I(year-1961)+(I(year-1961)|cc), wtyld) ## random intercept & slope model
+wy.lme <- lmer(wheat_yield~I(year-1961)+(I(year-1961)|cc), wtyld) ## random intercept & slope model
 summary(wt.lme)
-plot(wt_yield~fitted(wt.lme), wtyld)
+plot(wheat_yield~fitted(wt.lme), wtyld)
 
