@@ -54,25 +54,21 @@ wtyld <- wtyld[complete.cases(wtyld[ ,11]),]
 
 # Cereal productivity trends over time by country -------------------------
 # Total cereal yield (Mg/ha) trends
-ce.lme <- lmer(cereal_yield~I(year-1961)+(I(year-1961)|cc), ceyld) ## random intercept & slope model
-summary(ce.lme)
-plot(cereal_yield~fitted(ce.lme), ceyld)
+cy.lme <- lmer(cereal_yield~I(year-1961)+(I(year-1961)|cc), ceyld) ## random intercept & slope model
+summary(cy.lme)
+plot(cereal_yield~fitted(cy.lme), ceyld)
 
 # Maize yield (Mg/ha) trends
 my.lme <- lmer(maize_yield~I(year-1961)+(I(year-1961)|cc), mzyld) ## random intercept & slope model
-summary(mz.lme)
-plot(maize_yield~fitted(mz.lme), mzyld)
-
-# Maize area (Mha) trends
-ma.lme <- lmer(maize_area~I(year-1961)+(I(year-1961)|cc), mzyld) ## random intercept & slope model
-summary(ma.lme)
-plot(maize_area~fitted(ma.lme), mzyld)
+summary(my.lme)
+plot(maize_yield~fitted(my.lme), mzyld)
 
 # extract random effects
-ma.ran <- ranef(ma.lme) ## extract random effects
-ma <- as.data.frame(rownames(ma.ran$cc))
-ma$ma <- ma.ran$cc[,1]
-colnames(ma) <- c("b0","b1")
+my.ran <- ranef(my.lme) ## extract random effects
+my <- as.data.frame(rownames(my.ran$cc))
+my$b0 <- my.ran$cc[,1]
+my$b1 <- my.ran$cc[,2]
+colnames(my) <- c("cc","b0","b1")
 
 # Rice yield (Mg/ha) trends
 ry.lme <- lmer(rice_yield~I(year-1961)+(I(year-1961)|cc), rcyld) ## random intercept & slope model
@@ -83,4 +79,18 @@ plot(rice_yield~fitted(ry.lme), rcyld)
 wy.lme <- lmer(wheat_yield~I(year-1961)+(I(year-1961)|cc), wtyld) ## random intercept & slope model
 summary(wt.lme)
 plot(wheat_yield~fitted(wt.lme), wtyld)
+
+# Maize, rice & wheat area trends over time by country --------------------
+# Maize area (Mha) trends
+ma.lme <- lmer(maize_area~I(year-1961)+(I(year-1961)|cc), mzyld) ## random intercept & slope model
+summary(ma.lme)
+plot(maize_area~fitted(ma.lme), mzyld)
+
+# extract random effects
+ma.ran <- ranef(ma.lme) ## extract random effects
+ma <- as.data.frame(rownames(ma.ran$cc))
+ma$b0 <- ma.ran$cc[,1]
+ma$b1 <- ma.ran$cc[,2]
+colnames(ma) <- c("cc","b0","b1")
+
 
