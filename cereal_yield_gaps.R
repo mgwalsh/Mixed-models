@@ -29,7 +29,7 @@ wheat_prod <- read.table("wheat_prod.csv", header = T, sep = ",") ## total wheat
 fert_consumption <- read.table("fert_consumption.csv", header = T, sep = ",") ## fertilizer consumption (kg/ha for arable land)
 
 # Yield calculations ------------------------------------------------------
-# Total cereal yield calculations (Mg/ha)
+# Cereal yield calculations (Mg/ha)
 ceyld <- merge(cereal_panel, cereal_prod, by="id")
 ceyld$cereal_yield <- ceyld$cereal_prod / ceyld$cereal_area ## Mg/ha
 ceyld <- ceyld[complete.cases(ceyld[ ,9]),]
@@ -64,10 +64,10 @@ summary(my.lme)
 plot(maize_yield~fitted(my.lme), mzyld)
 
 # extract coeficients
-my.coef <- coef(my.lme) ## extract random effects
-my <- as.data.frame(rownames(my.coef$cc))
-my$b0 <- my.coef$cc[,1]
-my$b1 <- my.coef$cc[,2]
+my.ran <- ran(my.lme) ## extract random effects
+my <- as.data.frame(rownames(my.ran$cc))
+my$b0 <- my.ran$cc[,1]
+my$b1 <- my.ran$cc[,2]
 colnames(my) <- c("cc","b0","b1")
 
 # extract standard errors
