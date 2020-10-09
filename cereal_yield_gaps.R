@@ -1,4 +1,4 @@
-# Mixed model analyses of global south cereal-yield gap data
+# Mixed model analyses of "global south" cereal-yield gap data
 # M.G. Walsh, October 2020
 
 # Required packages
