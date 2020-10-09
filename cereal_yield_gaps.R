@@ -76,6 +76,7 @@ mye <- as.data.frame(rownames(mye.se$cc))
 mye$e0 <- mye.se$cc[,1]
 mye$e1 <- mye.se$cc[,2]
 colnames(mye) <- c("cc","e0","e1")
+maize_yield <- merge(my, mye, by="cc")
 
 # Rice yield (Mg/ha) trends
 ry.lme <- lmer(rice_yield~I(year-2020)+(I(year-2020)|cc), rcyld) ## random intercept & slope model
@@ -110,4 +111,3 @@ maize_area <- merge(ma, mae, by="cc")
 
 # write country-level output dataframe
 dir.create("Results", showWarnings=F)
-maize_area <- merge(ma, mae, by="cc")
