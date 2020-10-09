@@ -56,7 +56,7 @@ wtyld <- wtyld[complete.cases(wtyld[ ,11]),]
 # Total cereal yield (Mg/ha) trends
 cy.lme <- lmer(cereal_yield~I(year-2020)+(I(year-2020)|cc), ceyld) ## random intercept & slope model
 summary(cy.lme)
-plot(cereal_yield~fitted(cy.lme), ceyld)
+plot(cereal_yield~fitted(cy.lme), ceyld) ## overall model fit
 
 # Maize yield (Mg/ha) trends
 my.lme <- lmer(maize_yield~I(year-2020)+(I(year-2020)|cc), mzyld) ## random intercept & slope model
