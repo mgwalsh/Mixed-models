@@ -15,7 +15,7 @@ dir.create("Yield_gap", showWarnings=F)
 setwd("./Yield_gap")
 
 # download data
-download("", "Cereal_yield_gap.zip", mode = "wb")
+# download("", "Cereal_yield_gap.zip", mode = "wb") ## post later
 unzip("Cereal_yield_gap.zip", overwrite = T)
 cereal_panel <- read.table("cereal_panel.csv", header = T, sep = ",") ## global south data only
 hdi <- read.table("hdi.csv", header = T, sep = ",") ## human development index
@@ -64,7 +64,7 @@ summary(my.lme)
 plot(maize_yield~fitted(my.lme), mzyld)
 
 # extract coeficients
-my.ran <- ran(my.lme) ## extract random effects
+my.ran <- ranef(my.lme) ## extract random effects
 my <- as.data.frame(rownames(my.ran$cc))
 my$b0 <- my.ran$cc[,1]
 my$b1 <- my.ran$cc[,2]
