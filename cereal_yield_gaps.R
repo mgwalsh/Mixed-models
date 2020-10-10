@@ -1,4 +1,4 @@
-# Meta-analyses of "global south" cereal yield and area data
+# Meta-analyses of "global south" cereal yield and cropland area data
 # M.G. Walsh, October 2020
 
 # Required packages
