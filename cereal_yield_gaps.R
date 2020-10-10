@@ -60,7 +60,9 @@ plot(cereal_yield~exp(fitted(cy.lme))-1, ceyld) ## model fit
 
 # Maize yield (Mg/ha) trends
 my.lme <- lmer(log(maize_yield+1)~I(year-2020)+(I(year-2020)|cc), mzyld) ## random intercept & slope model
-summary(my.lme)
+display(my.lme)
+
+# diagnostic plot
 par(pty="s")
 plot(maize_yield~exp(fitted(my.lme))-1, xlim=c(0,15), ylim=c(0,15), xlab="Expected maize yield (Mg/ha)",
      ylab="Reported maize yield (Mg/ha)", cex.lab=1.3, mzyld)
