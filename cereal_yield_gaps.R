@@ -61,16 +61,19 @@ plot(cereal_yield~exp(fitted(cy.lme))-1, ceyld) ## model fit
 # Maize yield (Mg/ha) trends
 my.lme <- lmer(log(maize_yield+1)~I(year-2020)+(I(year-2020)|cc), mzyld) ## random intercept & slope model
 summary(my.lme)
-plot(maize_yield~exp(fitted(my.lme))-1, mzyld)
+par(pty="s")
+plot(maize_yield~exp(fitted(my.lme))-1, xlim=c(0,15), ylim=c(0,15), xlab="Expected maize yield (Mg/ha)",
+     ylab="Reported maize yield (Mg/ha)", cex.lab=1.3, mzyld)
+abline(c(0,1), col="red", lwd=2)
 
-# extract random effects
+# extract country-level random effects
 my.ran <- ranef(my.lme) ## extract random effects
 my <- as.data.frame(rownames(my.ran$cc))
-my$b0 <- my.ran$cc[,1]
-my$b1 <- my.ran$cc[,2]
-colnames(my) <- c("cc","b0","b1")
+my$y0 <- my.ran$cc[,1]
+my$yt <- my.ran$cc[,2]
+colnames(my) <- c("cc","y0","yt")
 
-# extract standard errors
+# extract country-level standard errors
 mye.se <- se.coef(my.lme) ## extract random effects
 mye <- as.data.frame(rownames(mye.se$cc))
 mye$se0 <- mye.se$cc[,1]
