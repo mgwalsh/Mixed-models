@@ -54,16 +54,16 @@ wtyld <- wtyld[complete.cases(wtyld[ ,11]),]
 
 # Cereal productivity trends over time by country -------------------------
 # Total cereal yield (Mg/ha) trends
-cy.lme <- lmer(cereal_yield~I(year-2020)+(I(year-2020)|cc), ceyld) ## random intercept & slope model
+cy.lme <- lmer(log(cereal_yield+1)~I(year-2020)+(I(year-2020)|cc), ceyld) ## random intercept & slope model
 summary(cy.lme)
-plot(cereal_yield~fitted(cy.lme), ceyld) ## overall model fit
+plot(cereal_yield~exp(fitted(cy.lme))-1, ceyld) ## overall model fit
 
 # Maize yield (Mg/ha) trends
-my.lme <- lmer(maize_yield~I(year-2020)+(I(year-2020)|cc), mzyld) ## random intercept & slope model
+my.lme <- lmer(log(maize_yield+1)~I(year-2020)+(I(year-2020)|cc), mzyld) ## random intercept & slope model
 summary(my.lme)
-plot(maize_yield~fitted(my.lme), mzyld)
+plot(maize_yield~exp(fitted(my.lme))-1, mzyld)
 
-# extract coeficients
+# extract random effects
 my.ran <- ranef(my.lme) ## extract random effects
 my <- as.data.frame(rownames(my.ran$cc))
 my$b0 <- my.ran$cc[,1]
@@ -73,15 +73,15 @@ colnames(my) <- c("cc","b0","b1")
 # extract standard errors
 mye.se <- se.coef(my.lme) ## extract random effects
 mye <- as.data.frame(rownames(mye.se$cc))
-mye$e0 <- mye.se$cc[,1]
-mye$e1 <- mye.se$cc[,2]
-colnames(mye) <- c("cc","e0","e1")
+mye$se0 <- mye.se$cc[,1]
+mye$se1 <- mye.se$cc[,2]
+colnames(mye) <- c("cc","se0","se1")
 maize_yield <- merge(my, mye, by="cc")
 
 # Rice yield (Mg/ha) trends
-ry.lme <- lmer(rice_yield~I(year-2020)+(I(year-2020)|cc), rcyld) ## random intercept & slope model
+ry.lme <- lmer(log(rice_yield+1)~I(year-2020)+(I(year-2020)|cc), rcyld) ## random intercept & slope model
 summary(ry.lme)
-plot(rice_yield~fitted(ry.lme), rcyld)
+plot(rice_yield~exp(fitted(ry.lme))-1, rcyld)
 
 # Wheat yield (Mg/ha) trends
 wy.lme <- lmer(wheat_yield~I(year-2020)+(I(year-2020)|cc), wtyld) ## random intercept & slope model
@@ -90,9 +90,9 @@ plot(wheat_yield~fitted(wt.lme), wtyld)
 
 # Maize, rice & wheat area trends over time by country --------------------
 # Maize area (ha) trends
-ma.lme <- lmer(maize_area~I(year-2020)+(I(year-2020)|cc), mzyld) ## random intercept & slope model
+ma.lme <- lmer(log(maize_area+1)~I(year-2020)+(I(year-2020)|cc), mzyld) ## random intercept & slope model
 summary(ma.lme)
-plot(maize_area~fitted(ma.lme), mzyld)
+plot(maize_area~exp(fitted(ma.lme))-1, mzyld)
 
 # extract random effects
 ma.ran <- ranef(ma.lme) ## extract random effects
@@ -106,7 +106,7 @@ mae.se <- se.coef(ma.lme) ## extract random effects
 mae <- as.data.frame(rownames(mae.se$cc))
 mae$e0 <- mae.se$cc[,1]
 mae$e1 <- mae.se$cc[,2]
-colnames(mae) <- c("cc","e0","e1")
+colnames(mae) <- c("cc","se0","se1")
 maize_area <- merge(ma, mae, by="cc")
 
 # write country-level output dataframe
