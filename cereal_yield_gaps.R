@@ -84,9 +84,9 @@ summary(ry.lme)
 plot(rice_yield~exp(fitted(ry.lme))-1, rcyld)
 
 # Wheat yield (Mg/ha) trends
-wy.lme <- lmer(wheat_yield~I(year-2020)+(I(year-2020)|cc), wtyld) ## random intercept & slope model
+wy.lme <- lmer(log(wheat_yield+1)~I(year-2020)+(I(year-2020)|cc), wtyld) ## random intercept & slope model
 summary(wt.lme)
-plot(wheat_yield~fitted(wt.lme), wtyld)
+plot(wheat_yield~exp(fitted(wt.lme))-1, wtyld)
 
 # Maize, rice & wheat area trends over time by country --------------------
 # Maize area (ha) trends
@@ -104,8 +104,8 @@ colnames(ma) <- c("cc","b0","b1")
 # extract standard errors
 mae.se <- se.coef(ma.lme) ## extract random effects
 mae <- as.data.frame(rownames(mae.se$cc))
-mae$e0 <- mae.se$cc[,1]
-mae$e1 <- mae.se$cc[,2]
+mae$se0 <- mae.se$cc[,1]
+mae$se1 <- mae.se$cc[,2]
 colnames(mae) <- c("cc","se0","se1")
 maize_area <- merge(ma, mae, by="cc")
 
