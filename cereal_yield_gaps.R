@@ -86,7 +86,7 @@ plot(rice_yield~exp(fitted(ry.lme))-1, rcyld)
 # Wheat yield (Mg/ha) trends
 wy.lme <- lmer(log(wheat_yield+1)~I(year-2020)+(I(year-2020)|cc), wtyld) ## random intercept & slope model
 summary(wt.lme)
-plot(wheat_yield~exp(fitted(wt.lme))-1, wtyld)
+plot(wheat_yield~exp(fitted(wy.lme))-1, wtyld)
 
 # Maize, rice & wheat area trends over time by country --------------------
 # Maize area (ha) trends
