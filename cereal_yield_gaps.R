@@ -1,4 +1,4 @@
-# Meta-analyses of "global south" cereal yield and cropland area data
+# Mixed model analyses of "global south" cereal yield and cropland area data
 # M.G. Walsh, October 2020
 
 # Required packages
@@ -19,7 +19,6 @@ setwd("./Yield_gap")
 unzip("Cereal_yield_gap.zip", overwrite = T)
 cereal_panel <- read.table("cereal_panel.csv", header = T, sep = ",") ## global south data only
 land_area <- read.table("land_area.csv", header = T, sep = ",") ## country area (sq. kilometers)
-cereal_panel <- merge(cereal_panel, land_area, by="id")
 hdi <- read.table("hdi.csv", header = T, sep = ",") ## human development index
 arable_perc <- read.table("arable_perc.csv", header = T, sep = ",") ##  share of arable area (%)
 ag_employ <- read.table("ag_employ.csv", header = T, sep = ",") ## share of ag employed (%)
@@ -96,10 +95,15 @@ summary(wy.lme)
 plot(wheat_yield~exp(fitted(wy.lme))-1, wtyld)
 
 # Maize, rice & wheat area trends over time by country --------------------
+cereal_panel <- merge(cereal_panel, land_area, by="id")
+cearea_props <- merge(cereal_panel, area, by="id")
+cearea_props$maize_area <- (cearea_props$maize_area / 100) / cearea_props$land_area 
+cearea_props$rice_area <- (cearea_props$rice_area / 100) / cearea_props$land_area 
+cearea_props$wheat_area <- (cearea_props$wheat_area / 100) / cearea_props$land_area 
+
 # Maize area (ha) trends
-ma.lme <- lmer(log(maize_area+1)~I(year-2020)+(I(year-2020)|cc), mzyld) ## random intercept & slope model
-summary(ma.lme)
-plot(maize_area~exp(fitted(ma.lme))-1, mzyld)
+ma.glme <- glmer(~I(year-2020)+(I(year-2020)|cc), family=binomial, cearea_props) ## random intercept & slope model
+summary(ma.glme)
 
 # extract random effects
 ma.ran <- ranef(ma.lme) ## extract random effects
