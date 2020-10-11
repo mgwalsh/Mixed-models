@@ -58,7 +58,7 @@ cy.lme <- lmer(log(cereal_yield+1)~I(year-2020)+(I(year-2020)|cc), ceyld) ## ran
 summary(cy.lme)
 plot(cereal_yield~exp(fitted(cy.lme))-1, ceyld) ## model fit
 
-# Maize yield (Mg/ha) trends
+# Maize yield (Mg/ha) trends by country
 my.lme <- lmer(log(maize_yield+1)~I(year-2020)+(I(year-2020)|cc), mzyld) ## random intercept & slope model
 display(my.lme)
 
