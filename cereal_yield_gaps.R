@@ -18,6 +18,8 @@ setwd("./Yield_gap")
 # download("", "Cereal_yield_gap.zip", mode = "wb") ## post later
 unzip("Cereal_yield_gap.zip", overwrite = T)
 cereal_panel <- read.table("cereal_panel.csv", header = T, sep = ",") ## global south data only
+land_area <- read.table("land_area.csv", header = T, sep = ",") ## country area (sq. kilometers)
+cereal_panel <- merge(cereal_panel, land_area, by="id")
 hdi <- read.table("hdi.csv", header = T, sep = ",") ## human development index
 arable_perc <- read.table("arable_perc.csv", header = T, sep = ",") ##  share of arable area (%)
 ag_employ <- read.table("ag_employ.csv", header = T, sep = ",") ## share of ag employed (%)
