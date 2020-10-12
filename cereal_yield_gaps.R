@@ -32,7 +32,7 @@ fert_consumption <- read.table("fert_consumption.csv", header = T, sep = ",") ##
 # Yield calculations ------------------------------------------------------
 # Cereal yield calculations (Mg/ha)
 ceyld <- merge(cereal_panel, cereal_prod, by="id")
-ceyld$cereal_yield <- ceyld$cereal_prod / ceyld$cereal_area ## Mg/ha
+ceyld$cereal_yield <- ceyld$cereal_prod / ceyld$cereal_area ## Mg/ha cereal yields
 ceyld <- ceyld[complete.cases(ceyld[ ,9]),]
 
 # Maize yield calculations (Mg/ha)
@@ -61,7 +61,7 @@ plot(cereal_yield~exp(fitted(cy.lme))-1, ceyld) ## model fit
 
 # Maize yield (Mg/ha) trends by country
 my.lme <- lmer(log(maize_yield+1)~I(year-2020)+(I(year-2020)|cc), mzyld) ## random intercept & slope model
-display(my.lme)
+summary(my.lme)
 
 # diagnostic plot
 par(pty="s")
@@ -69,11 +69,11 @@ plot(maize_yield~exp(fitted(my.lme))-1, xlim=c(0,15), ylim=c(0,15), xlab="Expect
      ylab="Reported maize yield (Mg/ha)", cex.lab=1.3, mzyld)
 abline(c(0,1), col="red", lwd=2)
 
-# extract country-level random effects
-my.ran <- ranef(my.lme) ## extract random effects
-my <- as.data.frame(rownames(my.ran$cc))
-my$y0 <- my.ran$cc[,1]
-my$yt <- my.ran$cc[,2]
+# extract country-level coeficients
+my.coef <- coef(my.lme) ## extract random effects
+my <- as.data.frame(rownames(my.coef$cc))
+my$y0 <- my.coef$cc[,1]
+my$yt <- my.coef$cc[,2]
 colnames(my) <- c("cc","y0","yt")
 
 # extract country-level standard errors
@@ -81,7 +81,7 @@ mye.se <- se.coef(my.lme) ## extract random effects
 mye <- as.data.frame(rownames(mye.se$cc))
 mye$se0 <- mye.se$cc[,1]
 mye$se1 <- mye.se$cc[,2]
-colnames(mye) <- c("cc","se0","se1")
+colnames(mye) <- c("cc","sey0","sey1")
 maize_yield <- merge(my, mye, by="cc")
 
 # Rice yield (Mg/ha) trends
@@ -95,30 +95,45 @@ summary(wy.lme)
 plot(wheat_yield~exp(fitted(wy.lme))-1, wtyld)
 
 # Maize, rice & wheat area trends over time by country --------------------
-cereal_panel <- merge(cereal_panel, land_area, by="id")
-cearea_props <- merge(cereal_panel, area, by="id")
-cearea_props$maize_area <- (cearea_props$maize_area / 100) / cearea_props$land_area 
-cearea_props$rice_area <- (cearea_props$rice_area / 100) / cearea_props$land_area 
-cearea_props$wheat_area <- (cearea_props$wheat_area / 100) / cearea_props$land_area 
+# Maize cropland area trends
+ma.glmer <- glmer(maize_area~I(year-2020)+(I(year-2020)|cc), family=poisson, mzyld) ## random intercept & slope model
+summary(ma.glmer)
+plot(maize_area~fitted(ma.glmer), mzyld)
 
-# Maize area (ha) trends
-ma.glme <- glmer(~I(year-2020)+(I(year-2020)|cc), family=binomial, cearea_props) ## random intercept & slope model
-summary(ma.glme)
-
-# extract random effects
-ma.ran <- ranef(ma.lme) ## extract random effects
-ma <- as.data.frame(rownames(ma.ran$cc))
-ma$b0 <- ma.ran$cc[,1]
-ma$b1 <- ma.ran$cc[,2]
-colnames(ma) <- c("cc","b0","b1")
+# extract country-level coeficients
+ma.coef <- coef(ma.glmer) ## extract random effects
+ma <- as.data.frame(rownames(ma.coef$cc))
+ma$b0 <- ma.coef$cc[,1]
+ma$b1 <- ma.coef$cc[,2]
+colnames(ma) <- c("cc","a0","at")
 
 # extract standard errors
-mae.se <- se.coef(ma.lme) ## extract random effects
+mae.se <- se.coef(ma.glmer) ## extract random effects
 mae <- as.data.frame(rownames(mae.se$cc))
 mae$se0 <- mae.se$cc[,1]
 mae$se1 <- mae.se$cc[,2]
-colnames(mae) <- c("cc","se0","se1")
+colnames(mae) <- c("cc","sea0","sea1")
 maize_area <- merge(ma, mae, by="cc")
 
-# write country-level output dataframe
+# Plots -------------------------------------------------------------------
+# Maize yields and areas
+maize <- merge(maize_yield, maize_area, by="cc")
+par(pty="s")
+
+# historical trends
+plot(yt~at, xlab="Maize area growth rate", ylab="Maize yield growth rate", cex.lab=1.3,
+     pch=3, xlim=c(-0.15,0.15), ylim=c(-0.02,0.07), maize) 
+abline(h=0.011, v=0.012, lty=2)
+text(maize$at, maize$yt, maize$cc, cex=0.65, pos=3, col="red") ## country codes
+
+# 2020 area and yield estimates
+maize$y20 <- exp(maize$y0)-1
+maize$a20 <- exp(maize$a0)/1000000
+plot(y20~a20, xlab="Maize area 2020 (Mha)", ylab="Maize yield 2020 (Mg/ha)", cex.lab=1.3,
+     pch=3, xlim=c(0,40), ylim=c(0,15), maize)
+text(maize$a20, maize$y20, maize$cc, cex=0.65, pos=3, col="red") ## country codes
+
+# write country-level output dataframes
 dir.create("Results", showWarnings=F)
+
+
