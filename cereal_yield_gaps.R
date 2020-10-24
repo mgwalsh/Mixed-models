@@ -1,4 +1,4 @@
-# Mixed model analyses of "global south" cereal yield gap and fertilizer consumption data
+# Mixed model analyses of "global south" cereal yield and fertilizer consumption data
 # M.G. Walsh, October 2020
 
 # Required packages
@@ -20,6 +20,7 @@ unzip("Cereal_yield_gap.zip", overwrite = T)
 cereal_panel <- read.table("cereal_panel.csv", header = T, sep = ",") ## global south data only
 hdi <- read.table("hdi.csv", header = T, sep = ",") ## human development index
 cereal_prod <- read.table("cereal_prod.csv", header = T, sep = ",") ## area and yield report for cereals
+area <- read.table("maize_rice_wheat_area.csv", header = T, sep = ",") ## maize, rice & wheat area panel (ha)
 maize_prod <- read.table("maize_prod.csv", header = T, sep = ",") ## total maize production (Mg) 
 rice_prod <- read.table("rice_prod.csv", header = T, sep = ",") ## total rice production estimates (Mg)
 wheat_prod <- read.table("wheat_prod.csv", header = T, sep = ",") ## total wheat production estimates (Mg)
