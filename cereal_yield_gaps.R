@@ -1,4 +1,4 @@
-# Mixed model analyses of "global south" cereal yield and cropland area data
+# Mixed model analyses of "global south" cereal yield gap and fertilizer consumption data
 # M.G. Walsh, October 2020
 
 # Required packages
@@ -53,7 +53,7 @@ wtyld <- merge(wtyld, wheat_prod, by="id")
 wtyld$wheat_yield <- wtyld$wheat_prod / wtyld$wheat_area ## Mg/ha wheat yields
 wtyld <- wtyld[complete.cases(wtyld[ ,11]),]
 
-# Cereal productivity trends over time by country -------------------------
+# Cereal yield trends over time by country --------------------------------
 # Total cereal yield (Mg/ha) trends
 cy.lme <- lmer(log(cereal_yield+1)~I(year-2020)+(I(year-2020)|cc), ceyld) ## random intercept & slope model
 summary(cy.lme)
