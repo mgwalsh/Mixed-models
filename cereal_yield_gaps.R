@@ -1,4 +1,4 @@
-# Mixed model analyses of "global south" cereal yield and fertilizer consumption data
+# Mixed model analyses of "global south" cereal yield, area and fertilizer consumption data
 # M.G. Walsh, October 2020
 
 # Required packages
@@ -84,12 +84,53 @@ maize_yield <- merge(my, mye, by="cc")
 # Rice yield (Mg/ha) trends
 ry.lme <- lmer(log(rice_yield+1)~I(year-2020)+(I(year-2020)|cc), rcyld) ## random intercept & slope model
 summary(ry.lme)
-plot(rice_yield~exp(fitted(ry.lme))-1, rcyld)
+
+# diagnostic plot
+par(pty="s")
+plot(rice_yield~exp(fitted(my.lme))-1, xlim=c(0,15), ylim=c(0,15), xlab="Expected rice yield (Mg/ha)",
+     ylab="Reported rice yield (Mg/ha)", cex.lab=1.3, rcyld)
+abline(c(0,1), col="red", lwd=2)
+
+# extract country-level coeficients
+ry.coef <- coef(ry.lme) ## extract random effects
+ry <- as.data.frame(rownames(ry.coef$cc))
+ry$y0 <- ry.coef$cc[,1]
+ry$yt <- ry.coef$cc[,2]
+colnames(ry) <- c("cc","ry0","ryt")
+
+# extract country-level standard errors
+rye.se <- se.coef(ry.lme) ## extract random effects
+rye <- as.data.frame(rownames(rye.se$cc))
+rye$se0 <- rye.se$cc[,1]
+rye$se1 <- rye.se$cc[,2]
+colnames(rye) <- c("cc","rsey0","rsey1")
+rice_yield <- merge(ry, rye, by="cc")
 
 # Wheat yield (Mg/ha) trends
 wy.lme <- lmer(log(wheat_yield+1)~I(year-2020)+(I(year-2020)|cc), wtyld) ## random intercept & slope model
 summary(wy.lme)
-plot(wheat_yield~exp(fitted(wy.lme))-1, wtyld)
+
+# diagnostic plot
+par(pty="s")
+plot(wheat_yield~exp(fitted(wy.lme))-1, xlim=c(0,15), ylim=c(0,15), xlab="Expected wheat yield (Mg/ha)",
+     ylab="Reported wheat yield (Mg/ha)", cex.lab=1.3, wtyld)
+abline(c(0,1), col="red", lwd=2)
+
+# extract country-level coeficients
+wy.coef <- coef(wy.lme) ## extract random effects
+my <- as.data.frame(rownames(my.coef$cc))
+my$y0 <- my.coef$cc[,1]
+my$yt <- my.coef$cc[,2]
+colnames(my) <- c("cc","y0","yt")
+
+# extract country-level standard errors
+mye.se <- se.coef(my.lme) ## extract random effects
+mye <- as.data.frame(rownames(mye.se$cc))
+mye$se0 <- mye.se$cc[,1]
+mye$se1 <- mye.se$cc[,2]
+colnames(mye) <- c("cc","sey0","sey1")
+maize_yield <- merge(my, mye, by="cc")
+
 
 # Maize, rice & wheat area trends over time by country --------------------
 # Maize cropland area trends
