@@ -1,5 +1,5 @@
-# Mixed model analyses of "global south" cereal yield, area and fertilizer consumption data
-# M.G. Walsh, October 2020
+# Mixed model analyses of "global south" national prioritization data
+# M.G. Walsh, November 2020
 
 # Required packages
 # install.packages(c("downloader","arm","dplyr")), dependencies=TRUE)
