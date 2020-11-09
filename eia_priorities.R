@@ -77,7 +77,7 @@ summary(ry.lme)
 
 # diagnostic plot
 par(pty="s")
-plot(rice_yield~exp(fitted(my.lme))-1, xlim=c(0,15), ylim=c(0,15), xlab="Expected rice yield (Mg/ha)",
+plot(rice_yield~exp(fitted(ry.lme))-1, xlim=c(0,12), ylim=c(0,12), xlab="Expected rice yield (Mg/ha)",
      ylab="Reported rice yield (Mg/ha)", cex.lab=1.3, rcyld)
 abline(c(0,1), col="red", lwd=2)
 
@@ -102,24 +102,24 @@ summary(wy.lme)
 
 # diagnostic plot
 par(pty="s")
-plot(wheat_yield~exp(fitted(wy.lme))-1, xlim=c(0,15), ylim=c(0,15), xlab="Expected wheat yield (Mg/ha)",
+plot(wheat_yield~exp(fitted(wy.lme))-1, xlim=c(0,10), ylim=c(0,10), xlab="Expected wheat yield (Mg/ha)",
      ylab="Reported wheat yield (Mg/ha)", cex.lab=1.3, wtyld)
 abline(c(0,1), col="red", lwd=2)
 
 # extract country-level coeficients
 wy.coef <- coef(wy.lme) ## extract random effects
-my <- as.data.frame(rownames(my.coef$cc))
-my$y0 <- my.coef$cc[,1]
-my$yt <- my.coef$cc[,2]
-colnames(my) <- c("cc","y0","yt")
+wy <- as.data.frame(rownames(wy.coef$cc))
+wy$y0 <- wy.coef$cc[,1]
+wy$yt <- wy.coef$cc[,2]
+colnames(wy) <- c("cc","y0","yt")
 
 # extract country-level standard errors
-mye.se <- se.coef(my.lme) ## extract random effects
-mye <- as.data.frame(rownames(mye.se$cc))
-mye$se0 <- mye.se$cc[,1]
-mye$se1 <- mye.se$cc[,2]
-colnames(mye) <- c("cc","sey0","sey1")
-maize_yield <- merge(my, mye, by="cc")
+wye.se <- se.coef(wy.lme) ## extract random effects
+wye <- as.data.frame(rownames(wye.se$cc))
+wye$se0 <- wye.se$cc[,1]
+wye$se1 <- wye.se$cc[,2]
+colnames(wye) <- c("cc","sey0","sey1")
+wheat_yield <- merge(wy, wye, by="cc")
 
 # Maize, rice & wheat area trends over time by country --------------------
 # Maize cropland area trends
