@@ -47,7 +47,7 @@ wtyld <- wtyld[complete.cases(wtyld[ ,11]),]
 
 # Cereal yield trends over time by country --------------------------------
 # Maize yield (Mg/ha) trends by country
-my.lme <- lmer(log(maize_yield+1)~I(year-2020)+(I(year-2020)|cc), mzyld) ## random intercept & slope model
+my.lme <- lmer(log(maize_yield+1)~I(year-2020)+(I(year-2020)|cc), mzyld) ## random intercept & trend model
 summary(my.lme)
 
 # diagnostic plot
